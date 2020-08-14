@@ -8,6 +8,7 @@ const [nameState, setNameState] = useState(null)
 const [lastNameState, setLastNameState] = useState(null)
 const [dateState, setDateState] = useState(null)
 
+
     useEffect(()=>{
         let [name, lastName] = props.data.name.split(" ")
         setNameState(name);
@@ -18,11 +19,13 @@ const [dateState, setDateState] = useState(null)
                 <p>Felicitaciones en tu dia</p>
                 <p>{props.data.poem}</p>
             </React.Fragment>)
+        }else{
+            setCongratState(null);
         }
 
         let [day, month, year] = props.date.split("-")
         setDateState(day+"/"+month+"/"+year.substr(2))
-    },[])
+    },[props.data])
 
     return(
         <React.Fragment>

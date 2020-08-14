@@ -64,7 +64,8 @@ const UserForm = () => {
     const date = new Date(birthday);
     let month = "" + (date.getMonth() + 1);
     if (month.length <= 1) month = "0" + month;
-    let day = date.getDate();
+    let day = ""+date.getDate();
+    if(day.length <= 1) day = "0"+ day;
     let year = date.getFullYear();
     const fullDate = day + "-" + month + "-" + year;    
 
