@@ -14,4 +14,4 @@ $ npm install
 $ npm start
 ```
 
-3.- Acceder al sitio [Servicio Cumpleaños](http://localhost:3000)
+3.- Acceder al sitio [Servicio Cumpleaños](http://localhost:3000) enla URL http://localhost:3000

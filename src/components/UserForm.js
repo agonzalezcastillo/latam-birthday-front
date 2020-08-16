@@ -5,26 +5,22 @@ import {
   Grid,
   Button,
   CircularProgress,
-  Snackbar
+  Snackbar,
 } from "@material-ui/core";
 import esLocale from "date-fns/locale/es";
-import MuiAlert from '@material-ui/lab/Alert';
+import MuiAlert from "@material-ui/lab/Alert";
 import api from "../api/api";
-import UserInfo from './UserInfo'
+import UserInfo from "./UserInfo";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-
-
-const UserForm = () => {  
-
+const UserForm = () => {
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-
 
   const [nameState, setNameState] = useState("");
   const [lastNameState, setLastNameState] = useState("");
@@ -34,23 +30,26 @@ const UserForm = () => {
   const [loaderState, setLoaderState] = useState(null);
   const [userInfoState, setUserInfoState] = useState(null);
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
 
-  useEffect(()=>{
-    birthdayChangeHandler(new Date())
-  },[])
+  useEffect(() => {
+    birthdayChangeHandler(new Date());
+  }, []);
 
   const loader = <CircularProgress />;
-  
+
   const clickhandler = () => {
     setDisabledState(true);
     setLoaderState(loader);
-    console.log(lastNameState)
-    if(nameState.split(" ").length <= 1 || lastNameState.split(" ").length <=1){      
-      setOpen(true);  
+    if (
+      nameState.trim().split(" ").length <= 1 ||
+      lastNameState.trim().split(" ").length <= 1
+    ) {
+      setOpen(true);
       setDisabledState(false);
-      setLoaderState(null);  
+      setLoaderState(null);
       return false;
-    }    
+    }
 
     api
       .post("/birthday", {
@@ -59,22 +58,33 @@ const UserForm = () => {
       })
       .then((response) => {
         setDisabledState(false);
-        setLoaderState(null);        
-        setUserInfoState(<UserInfo data={response.data} date={birthdayState}/>)   
+        setLoaderState(null);
+        setUserInfoState(
+          <UserInfo data={response.data} date={birthdayState} />
+        );
       })
       .catch((error) => {
         setDisabledState(false);
-        setLoaderState(null);        
+        setLoaderState(null);
+        setOpen2(true);
         console.log(error);
       });
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
+  };
+
+  const handleClose2 = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen2(false);
   };
 
   const nameChangeHandler = (name) => {
@@ -89,10 +99,10 @@ const UserForm = () => {
     const date = new Date(birthday);
     let month = "" + (date.getMonth() + 1);
     if (month.length <= 1) month = "0" + month;
-    let day = ""+date.getDate();
-    if(day.length <= 1) day = "0"+ day;
+    let day = "" + date.getDate();
+    if (day.length <= 1) day = "0" + day;
     let year = date.getFullYear();
-    const fullDate = day + "-" + month + "-" + year;    
+    const fullDate = day + "-" + month + "-" + year;
 
     setbirthdayState(fullDate);
     setCurrentDate(birthday);
@@ -136,11 +146,11 @@ const UserForm = () => {
             </Grid>
             <Grid justify="center" container alignContent="center" item xs={4}>
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
-                <KeyboardDatePicker                  
+                <KeyboardDatePicker
                   variant="modal"
-                  invalidDateMessage = "formato de fecha inválido"
+                  invalidDateMessage="formato de fecha inválido"
                   format="dd-MM-yyyy"
-                  cancelLabel= "cancelar"
+                  cancelLabel="cancelar"
                   margin="normal"
                   id="date-picker-inline"
                   value={currentDate}
@@ -162,30 +172,33 @@ const UserForm = () => {
             >
               {loaderState}
             </Grid>
-            <Grid>
-              {submitButton}
-            </Grid>
+            <Grid>{submitButton}</Grid>
           </Grid>
-        </form>   
+        </form>
         <Grid container justify="center" spacing={3}>
-        <Grid
-              container
-              item
-              xs={12}
-              md={12}
-              lg={12}
-              justify="center"
-              alignItems="center"
-            >
-              {userInfoState}
-            </Grid>
-        </Grid>     
+          <Grid
+            container
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            justify="center"
+            alignItems="center"
+          >
+            {userInfoState}
+          </Grid>
+        </Grid>
       </Container>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-              <Alert onClose={handleClose} severity="error">
-               Error: Nombre o apellido incompleto
-             </Alert>
-              </Snackbar>      
+        <Alert onClose={handleClose} severity="error">
+          Error: Nombre o apellido incompleto
+        </Alert>
+      </Snackbar>
+      <Snackbar open={open2} autoHideDuration={6000} onClose={handleClose2}>
+        <Alert onClose={handleClose2} severity="error">
+          Error en Servicio
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 };
