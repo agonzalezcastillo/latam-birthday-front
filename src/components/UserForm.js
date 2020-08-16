@@ -5,8 +5,10 @@ import {
   Grid,
   Button,
   CircularProgress,
+  Snackbar
 } from "@material-ui/core";
 import esLocale from "date-fns/locale/es";
+import MuiAlert from '@material-ui/lab/Alert';
 import api from "../api/api";
 import UserInfo from './UserInfo'
 import DateFnsUtils from "@date-io/date-fns";
@@ -18,6 +20,12 @@ import {
 
 
 const UserForm = () => {  
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+
   const [nameState, setNameState] = useState("");
   const [lastNameState, setLastNameState] = useState("");
   const [birthdayState, setbirthdayState] = useState("");
@@ -25,6 +33,7 @@ const UserForm = () => {
   const [disabledState, setDisabledState] = useState(false);
   const [loaderState, setLoaderState] = useState(null);
   const [userInfoState, setUserInfoState] = useState(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(()=>{
     birthdayChangeHandler(new Date())
@@ -35,6 +44,14 @@ const UserForm = () => {
   const clickhandler = () => {
     setDisabledState(true);
     setLoaderState(loader);
+    console.log(lastNameState)
+    if(nameState.split(" ").length <= 1 || lastNameState.split(" ").length <=1){      
+      setOpen(true);  
+      setDisabledState(false);
+      setLoaderState(null);  
+      return false;
+    }    
+
     api
       .post("/birthday", {
         name: nameState + " " + lastNameState,
@@ -47,9 +64,17 @@ const UserForm = () => {
       })
       .catch((error) => {
         setDisabledState(false);
-        setLoaderState(null);
+        setLoaderState(null);        
         console.log(error);
       });
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
 
   const nameChangeHandler = (name) => {
@@ -93,7 +118,7 @@ const UserForm = () => {
         <form>
           <Grid container justify="center" spacing={3}>
             <Grid item justify="center" container alignContent="center" xs={12}>
-              Cumpleaños Service
+              <h3>Servicio Cumpleaños</h3>
             </Grid>
             <Grid justify="center" container alignContent="center" item xs={4}>
               <TextField
@@ -155,7 +180,12 @@ const UserForm = () => {
               {userInfoState}
             </Grid>
         </Grid>     
-      </Container>      
+      </Container>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="error">
+               Error: Nombre o apellido incompleto
+             </Alert>
+              </Snackbar>      
     </React.Fragment>
   );
 };

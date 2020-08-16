@@ -16,7 +16,7 @@ const [dateState, setDateState] = useState(null)
 
         if(props.data.daysToBirthday === 0){
             setCongratState(<React.Fragment>
-                <p>Felicitaciones en tu dia</p>
+                <p>Felicitaciones en tu día</p>
                 <p>{props.data.poem}</p>
             </React.Fragment>)
         }else{
@@ -43,7 +43,7 @@ const [dateState, setDateState] = useState(null)
                     <p>Edad : {props.data.age}</p>
                 </Grid>
                 <Grid item justify="center" container alignContent="center" xs={12}>
-                    <p>Días para proximo Cumpleaños : {props.data.daysToBirthday}</p>
+                    <p>Días para Cumpleaños : {props.data.daysToBirthday}</p>
                 </Grid>
                 <Grid item justify="center" container alignContent="center" xs={12}>
                     {congratState}
