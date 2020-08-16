@@ -1,6 +1,6 @@
 # Servicio Cumpleaños
 
-Servicio Cumpleaños requiere [Node.js](https://nodejs.org/) v4+ para ejecutarse.
+Servicio Cumpleaños requiere [Node.js](https://nodejs.org/) v8+ para ejecutarse.
 
 1.- Clonar Proyecto en carpeta de su preferencia
 ```sh
@@ -14,4 +14,4 @@ $ npm install
 $ npm start
 ```
 
-3.- Acceder al sitio [Servicio Cumpleaños](http://localhost:3000) enla URL http://localhost:3000
+3.- Acceder al sitio [Servicio Cumpleaños](http://localhost:3000) en la URL http://localhost:3000
